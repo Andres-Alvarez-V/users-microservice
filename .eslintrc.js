@@ -10,7 +10,7 @@ module.exports = {
 		sourceType: 'module',
 	},
 	extends: ['eslint:recommended', 'plugin:prettier/recommended'],
-	plugins: ['simple-import-sort', 'import', 'unused-imports'],
+	plugins: ['import', 'unused-imports'],
 	rules: {
 		//error prevention
 		'array-callback-return': ['error', { checkForEach: true }],
@@ -67,7 +67,7 @@ module.exports = {
 		'import/first': 'error',
 		'import/newline-after-import': 'error',
 		'import/no-duplicates': 'error',
-		'import/no-unresolved': 'error',
+		'import/no-unresolved': 'warn',
 		'import/no-webpack-loader-syntax': 'error',
 		'prettier/prettier': [
 			'error',
@@ -84,8 +84,6 @@ module.exports = {
 				endOfLine: 'auto',
 			},
 		],
-		'simple-import-sort/exports': 'error',
-		'simple-import-sort/imports': 'error',
 		'unused-imports/no-unused-imports': 'error',
 		'no-unused-vars': 'off',
 		'unused-imports/no-unused-vars': [
