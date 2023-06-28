@@ -3,6 +3,7 @@ import { Sequelize } from 'sequelize';
 import { setUpModels } from '.';
 import { IUserRepository } from '../../domain/repositories/user.repository';
 import { ICreateUserDTO } from '../../app/dtos/request/user.dto';
+import bcrypt from 'bcrypt';
 
 dotenv.config();
 
@@ -24,5 +25,21 @@ export class UserRepository implements IUserRepository {
 
 	async create(data: ICreateUserDTO) {
 		await this.sequelize.models.usuarios.create(data);
+	}
+
+	async findByEmail(email: string) {
+		const user = await this.sequelize.models.usuarios.findOne({ where: { correo: email } });
+
+		return user;
+	}
+
+	async encryptPassword(password: string) {
+		const salt = await bcrypt.genSalt(10);
+
+		return await bcrypt.hash(password, salt);
+	}
+
+	async comparePassword(password: string, receivedPassword: string) {
+		return await bcrypt.compare(password, receivedPassword);
 	}
 }

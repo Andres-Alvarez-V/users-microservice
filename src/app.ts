@@ -4,6 +4,7 @@ import express, { Application } from 'express';
 import morgan from 'morgan';
 import routes from './modules/infrastructure/Endpoints';
 import { swaggerDocs } from './adapters/doc/swagger.adapter';
+import { boomErrorHandler } from './modules/infrastructure/middlewares/error.handler';
 
 dotenv.config();
 export class App {
@@ -15,7 +16,7 @@ export class App {
 		this.app.use(express.json());
 		this.app.use(morgan('dev'));
 		routes(this.app);
-		// this.app.use(errorHandler);
+		this.app.use(boomErrorHandler);
 	}
 
 	public getInstance(): Application {

@@ -19,7 +19,6 @@ export const UserSchema = {
 	},
 	numero_documento: {
 		type: DataTypes.STRING,
-		unique: true,
 		allowNull: false,
 	},
 	celular: {
