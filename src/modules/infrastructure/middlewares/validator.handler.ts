@@ -8,6 +8,8 @@ export const validatorHandler = (schema: Schema, property: string) => {
 		const { error } = schema.validate(data, { abortEarly: false });
 		if (error) {
 			next(boom.badRequest(error));
+
+			return;
 		}
 		next();
 	};

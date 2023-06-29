@@ -44,7 +44,7 @@ export const UserSchema = {
 	},
 };
 
-export class User extends Model implements IUser {
+export class User extends Model<IUser, Omit<IUser, 'id'>> implements IUser {
 	public id!: number;
 	public nombre!: string;
 	public apellido!: string;
@@ -54,8 +54,6 @@ export class User extends Model implements IUser {
 	public correo!: string;
 	public clave!: string;
 	public id_rol!: number;
-
-	static associate() {}
 
 	static config(sequelize: Sequelize) {
 		return {

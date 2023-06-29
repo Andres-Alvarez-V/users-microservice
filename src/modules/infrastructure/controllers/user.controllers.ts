@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 import { ICreateUserDTO } from '../../app/dtos/request/user.dto';
 import { UserUsecase } from '../../app/usecases/user.usecase';
 import { HttpCode } from '../../../helpers/enums/http-code.enum';
+import { IUserRoleDTO } from '../../app/dtos/response/user.dto';
+import boom from '@hapi/boom';
 
 export class UserController {
 	constructor(private readonly userUsecase: UserUsecase) {}
@@ -14,6 +16,25 @@ export class UserController {
 				message: 'Successfully created user',
 				newUser,
 			});
+		} catch (error) {
+			next(error);
+		}
+	}
+
+	async findById(req: Request, res: Response, next: NextFunction) {
+		try {
+			const id = Number(req.query.id);
+			if (isNaN(id)) {
+				boom.badRequest('Invalid id');
+			}
+			const querySearch = req.query.querySearch as string;
+			let answerData: null | IUserRoleDTO = null;
+			if (querySearch === 'role') {
+				answerData = await this.userUsecase.findRoleById(id);
+			} else {
+				boom.badRequest('Invalid query search');
+			}
+			res.status(HttpCode.OK).json(answerData);
 		} catch (error) {
 			next(error);
 		}

@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-unresolved
 import { IUser } from '../entities/user';
 
 export interface IUserRepository {
@@ -6,4 +5,5 @@ export interface IUserRepository {
 	findByEmail(email: string): Promise<unknown | null>;
 	encryptPassword(password: string): Promise<string>;
 	comparePassword(password: string, receivedPassword: string): Promise<boolean>;
+	findById(id: number): Promise<IUser | null>;
 }

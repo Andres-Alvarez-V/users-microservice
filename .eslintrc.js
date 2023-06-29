@@ -1,12 +1,21 @@
 module.exports = {
+  settings: {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+  },
 	root: true,
+  ignorePatterns: ['.eslintrc.js', "commitlint.config.js", "jest.config.js"],
 	env: {
 		es2021: true,
 		node: true,
+    jest:true
 	},
 	parser: '@typescript-eslint/parser',
 	parserOptions: {
-		ecmaVersion: 'latest',
+    project : 'tsconfig.json',
 		sourceType: 'module',
 	},
 	extends: ['eslint:recommended', 'plugin:prettier/recommended'],

@@ -75,4 +75,5 @@ router.post(
 	uniqueEmailValidator(),
 	userController.create.bind(userController),
 );
+
 export default router;

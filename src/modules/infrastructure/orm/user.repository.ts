@@ -4,6 +4,7 @@ import { setUpModels } from '.';
 import { IUserRepository } from '../../domain/repositories/user.repository';
 import { ICreateUserDTO } from '../../app/dtos/request/user.dto';
 import bcrypt from 'bcrypt';
+import { IUser } from '../../domain/entities/user';
 
 dotenv.config();
 
@@ -31,6 +32,16 @@ export class UserRepository implements IUserRepository {
 		const user = await this.sequelize.models.usuarios.findOne({ where: { correo: email } });
 
 		return user;
+	}
+
+	async findById(id: number) {
+		const user = await this.sequelize.models.usuarios.findOne({ where: { id } });
+		let userJSON: IUser | null = null;
+		if (user) {
+			userJSON = user.toJSON() as IUser;
+		}
+
+		return userJSON;
 	}
 
 	async encryptPassword(password: string) {
