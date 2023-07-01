@@ -25,14 +25,14 @@ export class UserController {
 		try {
 			const id = Number(req.query.id);
 			if (isNaN(id)) {
-				boom.badRequest('Invalid id');
+				throw boom.badRequest('Invalid id');
 			}
 			const querySearch = req.query.querySearch as string;
 			let answerData: null | IUserRoleDTO = null;
 			if (querySearch === 'role') {
 				answerData = await this.userUsecase.findRoleById(id);
 			} else {
-				boom.badRequest('Invalid query search');
+				throw boom.badRequest('Invalid query search');
 			}
 			res.status(HttpCode.OK).json(answerData);
 		} catch (error) {

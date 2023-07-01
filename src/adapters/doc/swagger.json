@@ -1,0 +1,168 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Users API - OpenAPI 3.0",
+    "description": "",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3001/api/v1"
+    }
+  ],
+  "paths": {
+    "/admin/crearPropietario":{
+      "post":{ 
+        "tags": [
+          "Users"
+        ],
+        "summary": "Create owner",
+        "description": "Create a new owner",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessfulResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing data or with any wrong.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FailResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user":{
+      "get":{
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get user details by ID and query.",
+        "description": "Get user details by ID and query parameters.\nExample: /api/v1/user?id=1&querySearch=role",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "User ID",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "example": 1
+            }
+          },
+          {
+            "name": "querySearch",
+            "in": "query",
+            "description": "Query search",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "role"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessfulResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing data or with any wrong.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FailResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UserCreate": {
+        "type": "object",
+        "properties": {
+          "nombre": {
+            "type": "string",
+            "example": "nombre"
+          },
+          "apellido": {
+            "type": "string",
+            "example": "apellido"
+          },
+          "numero_documento": {
+            "type": "string",
+            "example": "numero_documento"
+          },
+          "celular": {
+            "type": "string",
+            "example": "celular"
+          },
+          "fecha_nacimiento": {
+            "type": "string",
+            "example": "fecha_nacimiento"
+          },
+          "correo": {
+            "type": "string",
+            "example": "example@email.com"
+          },
+          "clave": {
+            "type": "string",
+            "example": "clave"
+          }
+        }
+      }
+    },
+      "SuccessfulResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "successful confirmation message"
+        }
+      }
+    },
+    "FailResponse": {
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "type": "number",
+          "example": "http status code"
+        },
+        "errorMessage": {
+          "type": "string",
+          "example": "fail message"
+        }
+      }
+    }
+  }
+}
