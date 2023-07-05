@@ -39,4 +39,17 @@ export class UserController {
 			next(error);
 		}
 	}
+
+	async signIn(req: Request, res: Response, next: NextFunction) {
+		try {
+			const data = req.body;
+			const token = await this.userUsecase.signIn(data);
+			res.status(HttpCode.OK).json({
+				message: 'Successfully logged in',
+				token,
+			});
+		} catch (error) {
+			next(error);
+		}
+	}
 }

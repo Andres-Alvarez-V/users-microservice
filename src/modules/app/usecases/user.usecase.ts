@@ -1,8 +1,9 @@
 import { IUser } from '../../domain/entities/user';
 import { RoleType } from '../../domain/enums/role-type.enum';
 import { IUserRepository } from '../../domain/repositories/user.repository';
-import { ICreateUserDTO } from '../dtos/request/user.dto';
+import { ICreateUserDTO, ILoginUserDTO } from '../dtos/request/user.dto';
 import { IUserRoleDTO } from '../dtos/response/user.dto';
+import boom from '@hapi/boom';
 
 export class UserUsecase {
 	constructor(private readonly userRepository: IUserRepository) {}
@@ -27,5 +28,22 @@ export class UserUsecase {
 		}
 
 		return role;
+	}
+
+	async signIn(data: ILoginUserDTO) {
+		const user = await this.userRepository.findByEmail(data.correo);
+		let token: null | string = null;
+		if (user === null) {
+			throw boom.notFound('Usuario no encontrado');
+		}
+
+		const isMatch = await this.userRepository.comparePassword(data.clave, user.clave);
+		if (!isMatch) {
+			throw boom.unauthorized('Contraseña incorrecta');
+		}
+
+		token = this.userRepository.generateJWT(user.id, user.id_rol);
+
+		return token;
 	}
 }

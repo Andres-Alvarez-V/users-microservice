@@ -4,7 +4,12 @@ import express, { Application } from 'express';
 import morgan from 'morgan';
 import routes from './modules/infrastructure/Endpoints';
 import { swaggerDocs } from './adapters/doc/swagger.adapter';
-import { boomErrorHandler } from './modules/infrastructure/middlewares/error.handler';
+import {
+	boomErrorHandler,
+	errorHandler,
+	logErrors,
+	ormErrorHandler,
+} from './modules/infrastructure/middlewares/error.handler';
 
 dotenv.config();
 export class App {
@@ -16,7 +21,10 @@ export class App {
 		this.app.use(express.json());
 		this.app.use(morgan('dev'));
 		routes(this.app);
+		this.app.use(logErrors);
+		this.app.use(ormErrorHandler);
 		this.app.use(boomErrorHandler);
+		this.app.use(errorHandler);
 	}
 
 	public getInstance(): Application {
@@ -41,12 +49,3 @@ export class App {
 		}
 	}
 }
-
-// const testDbConnection = async () => {
-// 	try {
-// 		await sequelize.authenticate();
-// 		console.log('Connection has been established successfully.');
-// 	} catch (error) {
-// 		console.error('Unable to connect to the database:', error);
-// 	}
-// };

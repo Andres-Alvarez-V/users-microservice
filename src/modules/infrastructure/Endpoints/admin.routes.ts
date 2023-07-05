@@ -1,15 +1,20 @@
 import { Router } from 'express';
-import { validatorHandler } from '../middlewares/validator.handler';
+import {
+	validatorEmailDuplicateHandler,
+	validatorJWTRoleHandler,
+	validatorSchemaHandler,
+} from '../middlewares/validator.handler';
 import { createUserSchema } from '../../app/dtos/request/user.dto';
 import { userController } from '../dependecies';
-import { uniqueEmailValidator } from '../middlewares/uniqueEmailValidator';
+import { RoleType } from '../../domain/enums/role-type.enum';
 
 const router = Router();
 
 router.post(
 	'/crearPropietario',
-	validatorHandler(createUserSchema, 'body'),
-	uniqueEmailValidator(),
+	validatorJWTRoleHandler(RoleType.ADMIN),
+	validatorSchemaHandler(createUserSchema, 'body'),
+	validatorEmailDuplicateHandler(),
 	userController.create.bind(userController),
 );
 

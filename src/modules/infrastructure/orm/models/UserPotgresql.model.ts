@@ -1,8 +1,8 @@
 import { DataTypes, Model, Sequelize } from 'sequelize';
-import { IUser } from '../../domain/entities/user';
+import { IUser } from '../../../domain/entities/user';
 
-export const USER_TABLE = 'usuarios';
-export const UserSchema = {
+export const USER_POSTGRESQL_TABLE = 'usuarios';
+export const UserPostgresqlSchema = {
 	id: {
 		type: DataTypes.INTEGER,
 		autoIncrement: true,
@@ -44,7 +44,7 @@ export const UserSchema = {
 	},
 };
 
-export class User extends Model<IUser, Omit<IUser, 'id'>> implements IUser {
+export class UserPostgresql extends Model<IUser, Omit<IUser, 'id'>> implements IUser {
 	public id!: number;
 	public nombre!: string;
 	public apellido!: string;
@@ -58,8 +58,8 @@ export class User extends Model<IUser, Omit<IUser, 'id'>> implements IUser {
 	static config(sequelize: Sequelize) {
 		return {
 			sequelize,
-			tableName: USER_TABLE,
-			modelName: USER_TABLE,
+			tableName: USER_POSTGRESQL_TABLE,
+			modelName: USER_POSTGRESQL_TABLE,
 			timestamps: false,
 		};
 	}

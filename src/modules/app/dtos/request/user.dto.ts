@@ -2,6 +2,7 @@ import Joi from 'joi';
 import { IUser } from '../../../domain/entities/user';
 
 export interface ICreateUserDTO extends Omit<IUser, 'id' | 'id_rol'> {}
+export interface ILoginUserDTO extends Pick<IUser, 'correo' | 'clave'> {}
 
 const name = Joi.string().min(3).max(254);
 const lastName = Joi.string().max(254);
@@ -33,5 +34,18 @@ export const createUserSchema = Joi.object<ICreateUserDTO>({
 		'date.max': 'Debes tener al menos 18 años para registrarte',
 		'string.email': '{#label} debe ser un correo electrónico válido',
 		'any.required': '{#label} es un campo obligatorio',
+	},
+});
+
+export const loginUserSchema = Joi.object<ILoginUserDTO>({
+	correo: email.required(),
+	clave: password.required(),
+}).options({
+	messages: {
+		'string.min': '{#label} debe tener al menos {#limit} caracteres',
+		'string.max': '{#label} debe tener como máximo {#limit} caracteres',
+		'string.pattern.base': '{#label} no cumple con el formato válido',
+		'any.required': '{#label} es un campo obligatorio',
+		'any.unknown': '{#label} no es un campo válido',
 	},
 });
