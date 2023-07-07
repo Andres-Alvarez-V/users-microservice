@@ -27,7 +27,7 @@ export const UserPostgresqlSchema = {
 	},
 	fecha_nacimiento: {
 		type: DataTypes.DATE,
-		allowNull: false,
+		allowNull: true,
 	},
 	correo: {
 		type: DataTypes.STRING,

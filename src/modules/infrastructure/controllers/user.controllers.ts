@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { ICreateUserDTO } from '../../app/dtos/request/user.dto';
+import { ICreateEmployeeDTO, ICreateUserDTO } from '../../app/dtos/request/user.dto';
 import { UserUsecase } from '../../app/usecases/user.usecase';
 import { HttpCode } from '../../../helpers/enums/http-code.enum';
 import { IUserRoleDTO } from '../../app/dtos/response/user.dto';
@@ -8,13 +8,27 @@ import boom from '@hapi/boom';
 export class UserController {
 	constructor(private readonly userUsecase: UserUsecase) {}
 
-	async create(req: Request, res: Response, next: NextFunction) {
+	async createOwner(req: Request, res: Response, next: NextFunction) {
 		try {
 			const data: ICreateUserDTO = req.body;
-			const newUser = await this.userUsecase.create(data);
+			const newOwner = await this.userUsecase.createOwner(data);
 			res.status(HttpCode.CREATED).json({
 				message: 'Successfully created user',
-				newUser,
+				newUser: newOwner,
+			});
+		} catch (error) {
+			next(error);
+		}
+	}
+
+	async createEmployee(req: Request, res: Response, next: NextFunction) {
+		try {
+			const data: ICreateEmployeeDTO = req.body;
+			const token = (req.headers.authorization as string).split(' ')[1];
+			const newEmployee = await this.userUsecase.createEmployee(data, token);
+			res.status(HttpCode.CREATED).json({
+				message: 'Successfully created employee',
+				newUser: newEmployee,
 			});
 		} catch (error) {
 			next(error);

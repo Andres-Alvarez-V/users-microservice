@@ -1,6 +1,8 @@
 import {
+	ICreateEmployeeDTO,
 	ICreateUserDTO,
 	ILoginUserDTO,
+	createEmployeeSchema,
 	createUserSchema,
 	loginUserSchema,
 } from '../../../../src/modules/app/dtos/request/user.dto';
@@ -65,5 +67,50 @@ describe('UserDto', () => {
 		expect(errorMessages).toContain('"fecha_nacimiento" es un campo obligatorio');
 		expect(errorMessages).toContain('"correo" es un campo obligatorio');
 		expect(errorMessages).toContain('"clave" es un campo obligatorio');
+	});
+});
+
+describe('createEmployeeSchema', () => {
+	const employeeMock: ICreateEmployeeDTO = {
+		nombre: 'test',
+		apellido: 'test',
+		numero_documento: '123456789',
+		celular: '5551234323',
+		fecha_nacimiento: '2000-01-01',
+		correo: 'test@example.com',
+		clave: 'password',
+		id_restaurante: 1,
+	};
+
+	it('should validate a valid employee', () => {
+		const { error } = createEmployeeSchema.validate(employeeMock, { abortEarly: false });
+		expect(error).toBeUndefined();
+	});
+
+	it('should return error because "document number" and "phone" should be a number', () => {
+		const invalidEmployee: ICreateEmployeeDTO = {
+			...employeeMock,
+			numero_documento: '12345678a',
+			celular: '5551234323a',
+		};
+		const { error } = createEmployeeSchema.validate(invalidEmployee, { abortEarly: false });
+		expect(error).toBeDefined();
+		const errorMessages = error?.details.map((detail) => detail.message);
+		expect(errorMessages).toContain('"numero_documento" no cumple con el formato válido');
+		expect(errorMessages).toContain('"celular" no cumple con el formato válido');
+	});
+
+	it('should return a error because "nombre", "apellido", "numero_documento", "celular", "correo", "clave" and "restaurantId" is required', () => {
+		const invalidEmployee = {};
+		const { error } = createEmployeeSchema.validate(invalidEmployee, { abortEarly: false });
+		expect(error).toBeDefined();
+		const errorMessages = error?.details.map((detail) => detail.message);
+		expect(errorMessages).toContain('"nombre" es un campo obligatorio');
+		expect(errorMessages).toContain('"apellido" es un campo obligatorio');
+		expect(errorMessages).toContain('"numero_documento" es un campo obligatorio');
+		expect(errorMessages).toContain('"celular" es un campo obligatorio');
+		expect(errorMessages).toContain('"correo" es un campo obligatorio');
+		expect(errorMessages).toContain('"clave" es un campo obligatorio');
+		expect(errorMessages).toContain('"id_restaurante" es un campo obligatorio');
 	});
 });

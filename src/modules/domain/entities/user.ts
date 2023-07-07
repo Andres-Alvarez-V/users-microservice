@@ -4,7 +4,7 @@ export interface IUser {
 	apellido: string;
 	numero_documento: string;
 	celular: string;
-	fecha_nacimiento: Date;
+	fecha_nacimiento: Date | null;
 	correo: string;
 	clave: string;
 	id_rol: number;

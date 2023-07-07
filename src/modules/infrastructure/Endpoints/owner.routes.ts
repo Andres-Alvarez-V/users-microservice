@@ -4,18 +4,18 @@ import {
 	validatorJWTRoleHandler,
 	validatorSchemaHandler,
 } from '../middlewares/validator.handler';
-import { createUserSchema } from '../../app/dtos/request/user.dto';
-import { userController } from '../dependecies';
+import { createEmployeeSchema } from '../../app/dtos/request/user.dto';
 import { RoleType } from '../../domain/enums/role-type.enum';
+import { userController } from '../dependecies';
 
 const router = Router();
 
 router.post(
-	'/crearPropietario',
-	validatorJWTRoleHandler(RoleType.ADMIN),
-	validatorSchemaHandler(createUserSchema, 'body'),
+	'/crearEmpleado',
+	validatorJWTRoleHandler(RoleType.OWNER),
+	validatorSchemaHandler(createEmployeeSchema, 'body'),
 	validatorEmailDuplicateHandler(),
-	userController.createOwner.bind(userController),
+	userController.createEmployee.bind(userController),
 );
 
 export default router;

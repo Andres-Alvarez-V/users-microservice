@@ -13,14 +13,16 @@
 	"paths": {
 		"/admin/crearPropietario": {
 			"post": {
-				"tags": ["Users"],
+				"tags": [
+					"Users"
+				],
 				"summary": "Create owner",
 				"description": "Create a new owner",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
 				"requestBody": {
 					"required": true,
 					"content": {
@@ -55,9 +57,77 @@
 				}
 			}
 		},
+		"/propietario/crearEmpleado": {
+			"post": {
+				"tags": [
+					"Users"
+				],
+				"summary": "Create employee",
+				"description": "Create a new employee",
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/EmployeeCreate"
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/SuccessfulResponse"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Missing data or with any wrong.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/FailResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/FailResponse"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Restaurant not found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/FailResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/user": {
 			"get": {
-				"tags": ["Users"],
+				"tags": [
+					"Users"
+				],
 				"summary": "Get user details by ID and query.",
 				"description": "Get user details by ID and query parameters.\nExample: /api/v1/user?id=1&querySearch=role",
 				"parameters": [
@@ -108,7 +178,9 @@
 		},
 		"/user/iniciar-sesion": {
 			"post": {
-				"tags": ["Users"],
+				"tags": [
+					"Users"
+				],
 				"summary": "Login",
 				"description": "Login",
 				"requestBody": {
@@ -167,7 +239,7 @@
 		}
 	},
 	"components": {
-    "securitySchemes": {
+		"securitySchemes": {
 			"bearerAuth": {
 				"type": "http",
 				"scheme": "bearer",
@@ -209,6 +281,43 @@
 					}
 				}
 			},
+			"EmployeeCreate": {
+				"type": "object",
+				"properties": {
+					"nombre": {
+						"type": "string",
+						"example": "nombre"
+					},
+					"apellido": {
+						"type": "string",
+						"example": "apellido"
+					},
+					"numero_documento": {
+						"type": "string",
+						"example": "123456789"
+					},
+					"celular": {
+						"type": "string",
+						"example": "0000000000"
+					},
+					"fecha_nacimiento": {
+						"type": "string",
+						"example": "2000-01-01"
+					},
+					"correo": {
+						"type": "string",
+						"example": "example@email.com"
+					},
+					"clave": {
+						"type": "string",
+						"example": "clave"
+					},
+					"id_restaurante": {
+						"type": "number",
+						"example": 1
+					}
+				}
+			},
 			"UserLogin": {
 				"type": "object",
 				"properties": {
@@ -246,7 +355,7 @@
 			}
 		}
 	},
-  "security": [
+	"security": [
 		{
 			"bearerAuth": []
 		}

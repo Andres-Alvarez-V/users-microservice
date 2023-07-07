@@ -36,6 +36,11 @@ export const validatorEmailDuplicateHandler = () => {
 
 export const validatorJWTRoleHandler = (role: RoleType) => {
 	return (req: Request, res: Response, next: NextFunction) => {
+		if (req.headers.authorization === undefined) {
+			next(boom.unauthorized('Token no encontrado'));
+
+			return;
+		}
 		const token = (req.headers.authorization as string).split(' ')[1];
 		const tokenDecoded = userRepository.verifyJWT(token);
 		if (tokenDecoded.error) {
