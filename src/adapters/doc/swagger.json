@@ -11,6 +11,47 @@
 		}
 	],
 	"paths": {
+		"/cliente/crear-cliente":{
+			"post":{
+				"tags": [
+					"Users"
+				],
+				"summary": "Create client",
+				"description": "Create a new client. 'Fecha de nacimiento' is optional. Format: YYYY-MM-DD",
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UserCreate"
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/SuccessfulResponse"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Missing data or with any wrong.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/FailResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/admin/crearPropietario": {
 			"post": {
 				"tags": [
@@ -63,7 +104,7 @@
 					"Users"
 				],
 				"summary": "Create employee",
-				"description": "Create a new employee",
+				"description": "Create a new employee. 'Fecha de nacimiento' is optional. Format: YYYY-MM-DD'",
 				"security": [
 					{
 						"bearerAuth": []

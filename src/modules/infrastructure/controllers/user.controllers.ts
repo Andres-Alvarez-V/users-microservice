@@ -1,5 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
-import { ICreateEmployeeDTO, ICreateUserDTO } from '../../app/dtos/request/user.dto';
+import {
+	ICreateClientDTO,
+	ICreateEmployeeDTO,
+	ICreateUserDTO,
+} from '../../app/dtos/request/user.dto';
 import { UserUsecase } from '../../app/usecases/user.usecase';
 import { HttpCode } from '../../../helpers/enums/http-code.enum';
 import { IUserRoleDTO } from '../../app/dtos/response/user.dto';
@@ -29,6 +33,19 @@ export class UserController {
 			res.status(HttpCode.CREATED).json({
 				message: 'Successfully created employee',
 				newUser: newEmployee,
+			});
+		} catch (error) {
+			next(error);
+		}
+	}
+
+	async createClient(req: Request, res: Response, next: NextFunction) {
+		try {
+			const data: ICreateClientDTO = req.body;
+			const newClient = await this.userUsecase.createClient(data);
+			res.status(HttpCode.CREATED).json({
+				message: 'Successfully created client',
+				newUser: newClient,
 			});
 		} catch (error) {
 			next(error);

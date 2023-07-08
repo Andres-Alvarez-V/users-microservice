@@ -9,3 +9,5 @@ export interface IUser {
 	clave: string;
 	id_rol: number;
 }
+
+export interface ICreateUser extends Omit<IUser, 'id'> {}

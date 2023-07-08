@@ -1,7 +1,9 @@
 import {
+	ICreateClientDTO,
 	ICreateEmployeeDTO,
 	ICreateUserDTO,
 	ILoginUserDTO,
+	createClientSchema,
 	createEmployeeSchema,
 	createUserSchema,
 	loginUserSchema,
@@ -112,5 +114,47 @@ describe('createEmployeeSchema', () => {
 		expect(errorMessages).toContain('"correo" es un campo obligatorio');
 		expect(errorMessages).toContain('"clave" es un campo obligatorio');
 		expect(errorMessages).toContain('"id_restaurante" es un campo obligatorio');
+	});
+});
+
+describe('createClientSchema', () => {
+	const clientMock: ICreateClientDTO = {
+		nombre: 'test',
+		apellido: 'test',
+		numero_documento: '123456789',
+		celular: '5551234323',
+		correo: 'testcreateclient@routes.com',
+		clave: 'password',
+	};
+
+	it('should validate a valid client', () => {
+		const { error } = createClientSchema.validate(clientMock, { abortEarly: false });
+		expect(error).toBeUndefined();
+	});
+
+	it('should return error because "document number" and "phone" should be a number', () => {
+		const invalidClient: ICreateClientDTO = {
+			...clientMock,
+			numero_documento: '12345678a',
+			celular: '5551234323a',
+		};
+		const { error } = createClientSchema.validate(invalidClient, { abortEarly: false });
+		expect(error).toBeDefined();
+		const errorMessages = error?.details.map((detail) => detail.message);
+		expect(errorMessages).toContain('"numero_documento" no cumple con el formato válido');
+		expect(errorMessages).toContain('"celular" no cumple con el formato válido');
+	});
+
+	it('should return a error because "nombre", "apellido", "numero_documento", "celular", "correo" and "clave" is required', () => {
+		const invalidClient = {};
+		const { error } = createClientSchema.validate(invalidClient, { abortEarly: false });
+		expect(error).toBeDefined();
+		const errorMessages = error?.details.map((detail) => detail.message);
+		expect(errorMessages).toContain('"nombre" es un campo obligatorio');
+		expect(errorMessages).toContain('"apellido" es un campo obligatorio');
+		expect(errorMessages).toContain('"numero_documento" es un campo obligatorio');
+		expect(errorMessages).toContain('"celular" es un campo obligatorio');
+		expect(errorMessages).toContain('"correo" es un campo obligatorio');
+		expect(errorMessages).toContain('"clave" es un campo obligatorio');
 	});
 });

@@ -1,8 +1,13 @@
-import { IUser } from '../../domain/entities/user';
+import { ICreateUser } from '../../domain/entities/user';
 import { RoleType } from '../../domain/enums/role-type.enum';
 import { IPlazoletaMicroservice } from '../../domain/microservices/plazoleta';
 import { IUserRepository } from '../../domain/repositories/user.repository';
-import { ICreateEmployeeDTO, ICreateUserDTO, ILoginUserDTO } from '../dtos/request/user.dto';
+import {
+	ICreateClientDTO,
+	ICreateEmployeeDTO,
+	ICreateUserDTO,
+	ILoginUserDTO,
+} from '../dtos/request/user.dto';
 import { IUserRoleDTO } from '../dtos/response/user.dto';
 import boom from '@hapi/boom';
 
@@ -14,7 +19,7 @@ export class UserUsecase {
 
 	async createOwner(data: ICreateUserDTO) {
 		const encryptPassword = await this.userRepository.encryptPassword(data.clave);
-		const newData: Omit<IUser, 'id'> = {
+		const newData: ICreateUser = {
 			...data,
 			clave: encryptPassword,
 			id_rol: RoleType.OWNER,
@@ -26,7 +31,7 @@ export class UserUsecase {
 
 	async createEmployee(data: ICreateEmployeeDTO, token: string) {
 		const encryptPassword = await this.userRepository.encryptPassword(data.clave);
-		const newData = {
+		const newData: ICreateUser = {
 			nombre: data.nombre,
 			apellido: data.apellido,
 			correo: data.correo,
@@ -39,6 +44,19 @@ export class UserUsecase {
 
 		const newUser = await this.userRepository.create(newData);
 		await this.plazoletaMicroservice.createEmployee(data.id_restaurante, newUser.id, token);
+
+		return newUser;
+	}
+
+	async createClient(data: ICreateClientDTO) {
+		const encryptPassword = await this.userRepository.encryptPassword(data.clave);
+		const newData: ICreateUser = {
+			...data,
+			fecha_nacimiento: data.fecha_nacimiento ? new Date(data.fecha_nacimiento) : null,
+			clave: encryptPassword,
+			id_rol: RoleType.CLIENT,
+		};
+		const newUser = await this.userRepository.create(newData);
 
 		return newUser;
 	}

@@ -1,13 +1,6 @@
 import Joi from 'joi';
 import { IUser } from '../../../domain/entities/user';
 
-export interface ICreateUserDTO extends Omit<IUser, 'id' | 'id_rol'> {}
-export interface ILoginUserDTO extends Pick<IUser, 'correo' | 'clave'> {}
-export interface ICreateEmployeeDTO extends Omit<ICreateUserDTO, 'fecha_nacimiento'> {
-	fecha_nacimiento?: string | null;
-	id_restaurante: number;
-}
-
 const name = Joi.string().min(3).max(254);
 const lastName = Joi.string().max(254);
 const documentNumber = Joi.string().pattern(/^[0-9]{8,20}$/);
@@ -32,6 +25,8 @@ const customMessages = {
 	'any.required': '{#label} es un campo obligatorio',
 	'any.unknown': '{#label} no es un campo válido',
 };
+
+export interface ICreateUserDTO extends Omit<IUser, 'id' | 'id_rol'> {}
 export const createUserSchema = Joi.object<ICreateUserDTO>({
 	nombre: name.required(),
 	apellido: lastName.required(),
@@ -46,6 +41,7 @@ export const createUserSchema = Joi.object<ICreateUserDTO>({
 	},
 });
 
+export interface ILoginUserDTO extends Pick<IUser, 'correo' | 'clave'> {}
 export const loginUserSchema = Joi.object<ILoginUserDTO>({
 	correo: email.required(),
 	clave: password.required(),
@@ -55,6 +51,10 @@ export const loginUserSchema = Joi.object<ILoginUserDTO>({
 	},
 });
 
+export interface ICreateEmployeeDTO extends Omit<ICreateUserDTO, 'fecha_nacimiento'> {
+	fecha_nacimiento?: string | null;
+	id_restaurante: number;
+}
 export const createEmployeeSchema = Joi.object<ICreateEmployeeDTO>({
 	nombre: name.required(),
 	apellido: lastName.required(),
@@ -64,6 +64,23 @@ export const createEmployeeSchema = Joi.object<ICreateEmployeeDTO>({
 	fecha_nacimiento: birthdate,
 	clave: password.required(),
 	id_restaurante: restaurantId.required(),
+}).options({
+	messages: {
+		...customMessages,
+	},
+});
+
+export interface ICreateClientDTO extends Omit<ICreateUserDTO, 'fecha_nacimiento'> {
+	fecha_nacimiento?: string | null;
+}
+export const createClientSchema = Joi.object<ICreateClientDTO>({
+	nombre: name.required(),
+	apellido: lastName.required(),
+	numero_documento: documentNumber.required(),
+	celular: phone.required(),
+	correo: email.required(),
+	fecha_nacimiento: birthdate,
+	clave: password.required(),
 }).options({
 	messages: {
 		...customMessages,

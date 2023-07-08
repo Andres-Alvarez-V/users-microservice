@@ -1,9 +1,8 @@
 import dotenv from 'dotenv';
 import { Sequelize } from 'sequelize';
 import { IUserRepository } from '../../../domain/repositories/user.repository';
-import { ICreateUserDTO } from '../../../app/dtos/request/user.dto';
 import bcrypt from 'bcrypt';
-import { IUser } from '../../../domain/entities/user';
+import { ICreateUser, IUser } from '../../../domain/entities/user';
 import jwt from 'jsonwebtoken';
 import { SequelizePostgresqlConnection } from '../sequelizePostgresqlConnection';
 
@@ -16,7 +15,7 @@ export class UserPostgresqlRepository implements IUserRepository {
 		this.sequelize = SequelizePostgresqlConnection.getInstance();
 	}
 
-	async create(data: ICreateUserDTO) {
+	async create(data: ICreateUser) {
 		const user = (await this.sequelize.models.usuarios.create(data)).toJSON();
 
 		return user as IUser;
